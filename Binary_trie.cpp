@@ -129,6 +129,18 @@ public:
             }
         }
     }
+
+    // Recursively frees every allocated node so the Trie can be
+    // destroyed (e.g. going out of scope each test case) without leaking.
+    void freeAll(TrieNode* node) {
+        if (node == nullptr) return;
+        for (int i = 0; i < ALPHABET_SIZE; ++i) freeAll(node->children[i]);
+        delete node;
+    }
+
+    ~Trie() {
+        freeAll(root);
+    }
 };
 
 int main() {
